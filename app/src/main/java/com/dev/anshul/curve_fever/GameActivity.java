@@ -22,21 +22,33 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+        // getWindow().getDecorView().setSystemUiVisibility(
+        //         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        //                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        //                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        //                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+        //                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+        //                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
         mGameDisplay = getWindowManager().getDefaultDisplay();
         mGameDisplay.getSize(mScreenSize);
-        // My testing device has 480px width, 782px height.
+        // Xperia T2 has 720 x 1208 px in non-immersive mode
+        //           and 720 x 1280 px in immersive mode
+        // Nexus 5 emulator  has 1080 x 1920 px
 
         setContentView(new GameView(this));
+    }
+
+    public void onPause(){
+        super.onPause();
+    }
+
+    public void onResume(){
+        super.onResume();
     }
 
 }

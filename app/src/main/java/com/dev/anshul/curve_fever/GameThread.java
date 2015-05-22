@@ -43,7 +43,7 @@ public class GameThread extends Thread {
                 synchronized (mGameView.getHolder())
                 {
                     mGameView.update();
-                    mGameView.draw(mGameCanvas);
+                        mGameView.draw(mGameCanvas);
                 }
             }
             finally

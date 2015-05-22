@@ -17,6 +17,8 @@ public class Head {
     protected int headVelocity;
 
     protected Paint headPaint = new Paint();
+    protected Paint pathPaint = new Paint();
+
     protected final int headRadius = 20;
 
     public Head()
@@ -34,6 +36,9 @@ public class Head {
             this.headX = GameActivity.mScreenSize.x;
 
         headPaint.setColor(Color.parseColor("#013ADF"));
+        pathPaint.setStrokeWidth(7);
+        pathPaint.setStyle(Paint.Style.STROKE);
+        pathPaint.setColor(Color.GREEN);
     }
 
     public void followFinger(int fingerX, int fingerY)

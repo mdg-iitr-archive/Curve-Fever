@@ -7,7 +7,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,6 +33,8 @@ public class GameView extends SurfaceView {
 
         this.mScreenWidth = GameActivity.mScreenSize.x;
         this.mScreenHeight= GameActivity.mScreenSize.y;
+
+        Log.i("screen", this.mScreenWidth+" x "+this.mScreenHeight);
 
         this.mThread = new GameThread(this);
         this.mHolder = this.getHolder();
@@ -64,6 +68,8 @@ public class GameView extends SurfaceView {
             }
         });
 
+        mtrailPath.moveTo(200,200);
+
     }
 
     public void update()
@@ -75,11 +81,10 @@ public class GameView extends SurfaceView {
     public void draw(Canvas canvas)
     {
         canvas.drawColor(Color.WHITE);
-        canvas.drawCircle((float)mHead.headX, (float)mHead.headY, (float)mHead.headRadius, mHead.headPaint);
-        canvas.drawPath (mtrailPath, mHead.headPaint);
-
         mtrailPath.lineTo((float) mHead.headX, (float) mHead.headY);
-        mtrailPath.setLastPoint((float) mHead.headX, (float) mHead.headY);
+        canvas.drawPath (mtrailPath, mHead.pathPaint);
+        canvas.drawCircle((float)mHead.headX, (float)mHead.headY, (float)mHead.headRadius, mHead.headPaint);
+
     }
     @SuppressLint("ClickableViewAccessibility")
     @Override
