@@ -12,8 +12,8 @@ import java.util.Random;
 
 public class Head {
 
-    protected int headX;
-    protected int headY;
+    protected double headX;
+    protected double headY;
     protected int headVelocity;
 
     protected Paint headPaint = new Paint();
@@ -31,9 +31,6 @@ public class Head {
         this.headX=200;
         this.headY=200;
         this.headVelocity = 10;
-
-        if(this.headX == 1)
-            this.headX = GameActivity.mScreenSize.x;
 
         headPaint.setColor(Color.parseColor("#013ADF"));
         pathPaint.setStrokeWidth(7);

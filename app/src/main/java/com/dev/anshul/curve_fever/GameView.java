@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Region;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -74,7 +75,18 @@ public class GameView extends SurfaceView {
 
     public void update()
     {
-        //Do something here.
+        Path circle = new Path();
+        circle.addCircle((float)mHead.headX, (float)mHead.headY, 1, Path.Direction.CW);
+
+        Region region2 = new Region();
+        region2.setPath(circle, new Region(0, 0, this.mScreenWidth, this.mScreenHeight));
+
+        Region region1 = new Region();
+        region1.setPath(mtrailPath,new Region(0, 0, this.mScreenWidth,  this.mScreenHeight));
+
+        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {
+            Log.d("update","intesect");
+        }
 
     }
 
