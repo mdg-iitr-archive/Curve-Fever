@@ -19,21 +19,21 @@ public class Head {
     protected Paint headPaint = new Paint();
     protected Paint pathPaint = new Paint();
 
-    protected final int headRadius = 20;
+    protected int headRadius = 5;
 
-    public Head()
+    protected int curveRadius = 30;
+    protected double angle  = 90;
+
+    public Head(int headX,int headY)
     {
-        Random random = new Random();
 
-//        this.headY = random.nextInt(200);
-//        this.headX = random.nextInt(200);
+        this.headX = headX;
+        this.headY = headY;
 
-        this.headX=200;
-        this.headY=200;
         this.headVelocity = 10;
 
         headPaint.setColor(Color.parseColor("#013ADF"));
-        pathPaint.setStrokeWidth(7);
+        pathPaint.setStrokeWidth(2);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(Color.GREEN);
     }
@@ -42,5 +42,26 @@ public class Head {
     {
         headX -= ((double)headX - (double)fingerX) * (double)headVelocity / 100.0;
         headY -= ((double)headY - (double)fingerY) * (double)headVelocity / 100.0;
+    }
+
+    public void followFinger2(double fingerX,double fingerY){
+        if (fingerX >= GameActivity.mScreenSize.x / 2) {
+            angle += 5;
+        } else {
+            angle -= 5;
+        }
+    }
+    public void followFinger2(boolean left){
+        if(left){
+            angle -=1;
+        }
+        else {
+            angle +=1;
+        }
+    }
+
+    public void moveForward(){
+        headX+=(curveRadius/10.0)*Math.cos(angle * Math.PI / 180);
+        headY+=(curveRadius/10.0)*Math.sin(angle * Math.PI / 180);
     }
 }

@@ -1,16 +1,20 @@
 package com.dev.anshul.curve_fever;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import java.util.List;
 
 public class GameActivity extends Activity {
 
@@ -41,6 +45,7 @@ public class GameActivity extends Activity {
         // Nexus 5 emulator  has 1080 x 1920 px
 
         setContentView(new GameView(this));
+        onDestroy();
     }
 
     public void onPause(){
