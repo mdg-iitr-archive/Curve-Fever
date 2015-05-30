@@ -22,4 +22,11 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        finish();
+
+    }
 }

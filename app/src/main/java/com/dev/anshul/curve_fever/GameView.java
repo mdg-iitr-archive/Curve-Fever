@@ -164,8 +164,8 @@ public class GameView extends SurfaceView {
 //        Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, MainActivity.class);
-        mContext.startActivity(intent);
         ((Activity)mContext).finish();
+        mContext.startActivity(intent);
     }
 
 //    private void checkCollision(){

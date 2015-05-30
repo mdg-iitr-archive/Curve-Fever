@@ -15,15 +15,17 @@ public class Head {
 
     protected double headX;
     protected double headY;
-    protected int headVelocity;
+    protected int headVelocity = 5;
 
     protected Paint headPaint = new Paint();
     protected Paint pathPaint = new Paint();
 
     protected int headRadius = 5;
 
-    protected int curveRadius = 50;
+    //protected int curveRadius = 50;
     protected double angle  = 90;
+    private int angularChange = 2;
+
     public boolean[][] points;
     private int tempx,tempy;
 
@@ -36,8 +38,6 @@ public class Head {
         this.headY = headY;
 
         points[headY][headX] = true;
-
-        this.headVelocity = 10;
 
         headPaint.setColor(Color.parseColor("#013ADF"));
         pathPaint.setStrokeWidth(2);
@@ -53,17 +53,17 @@ public class Head {
 
     public void followFinger2(double fingerX,double fingerY){
         if (fingerX >= GameActivity.mScreenSize.x / 2) {
-            angle += 1;
+            angle += angularChange;
         } else {
-            angle -= 1;
+            angle -= angularChange;
         }
     }
     public void followFinger2(boolean left){
         if(left){
-            angle -=1;
+            angle -=angularChange;
         }
         else {
-            angle +=1;
+            angle +=angularChange;
         }
     }
 
@@ -72,8 +72,8 @@ public class Head {
         tempx=(int)headX;
         tempy=(int)headY;
 
-        headX+=(curveRadius/10.0)*Math.cos(angle * Math.PI / 180);
-        headY+=(curveRadius/10.0)*Math.sin(angle * Math.PI / 180);
+        headX+=headVelocity*Math.cos(angle * Math.PI / 180);
+        headY+=headVelocity*Math.sin(angle * Math.PI / 180);
         if(headX<GameActivity.mScreenSize.x&&headY<GameActivity.mScreenSize.y) {
             return line(tempx, tempy, (int) headX, (int) headY);
         }
