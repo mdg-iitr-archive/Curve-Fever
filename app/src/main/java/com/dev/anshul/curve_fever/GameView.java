@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
+
 import java.util.Random;
 
 
@@ -79,7 +81,6 @@ public class GameView extends SurfaceView {
             }
         });
 
-
         Random random = new Random();
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
@@ -90,7 +91,8 @@ public class GameView extends SurfaceView {
 
     public void update()
     {
-        //checkCollision2();
+        //checkCollision();
+
         if(touchHeldRight){
             mHead.followFinger2(false);
         }
@@ -98,7 +100,9 @@ public class GameView extends SurfaceView {
             mHead.followFinger2(true);
         }
 
-        mHead.moveForward();
+        if(!mHead.moveForward()){
+            tryGameOver();
+        }
     }
 
     public void draw(Canvas canvas)
@@ -145,7 +149,7 @@ public class GameView extends SurfaceView {
             }
         }
 
-//        if(event.getAction()==MotionEvent.ACTION_DOWN)
+//        if(event.getAction()==MotionEvent.ACTION_DOWN)        //Older touch sensing algo
 //            touchHeld=true;
 //        else if(event.getAction()==MotionEvent.ACTION_UP)
 //            touchHeld=false;
@@ -157,36 +161,38 @@ public class GameView extends SurfaceView {
     }
 
     public void tryGameOver(){
+//        Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, MainActivity.class);
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
     }
 
-    private void checkCollision(){
-        Region region1 = new Region();
-        region1.setPath(mtrailPath,new Region(0, 0, this.mScreenWidth,  this.mScreenHeight));
+//    private void checkCollision(){
+//        Region region1 = new Region();
+//        region1.setPath(mtrailPath,new Region(0, 0, this.mScreenWidth,  this.mScreenHeight));
+//
+//        Path circle = new Path();
+//        circle.addCircle((float)mHead.headX, (float)mHead.headY, 1, Path.Direction.CW);
+//        Region region2 = new Region();
+//        region2.setPath(circle, new Region(0, 0, this.mScreenWidth, this.mScreenHeight));
+//
+//        if (region1.contains((int)mHead.headX,(int)mHead.headY)){
+////        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {    //logic error in regions
+//            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
+//            tryGameOver();
+//        }
+//    }
 
-        Path circle = new Path();
-        circle.addCircle((float)mHead.headX, (float)mHead.headY, 1, Path.Direction.CW);
-        Region region2 = new Region();
-        region2.setPath(circle, new Region(0, 0, this.mScreenWidth, this.mScreenHeight));
+//    public void checkCollision2(){
+//        RectF rectF = new RectF();
+//        mtrailPath.computeBounds(rectF, true);
+//        r = new Region();
+//        r.setPath(mtrailPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+//        if(r.contains((int)mHead.headX,(int)mHead.headY)){
+//            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
+//            tryGameOver();
+//        }
+//    }
 
-        if (region1.contains((int)mHead.headX,(int)mHead.headY)){
-//        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {    //logic error in regions
-            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
-            tryGameOver();
-        }
-    }
-
-    public void checkCollision2(){
-        RectF rectF = new RectF();
-        mtrailPath.computeBounds(rectF, true);
-        r = new Region();
-        r.setPath(mtrailPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
-        if(r.contains((int)mHead.headX,(int)mHead.headY)){
-            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
-            tryGameOver();
-        }
-    }
 }
