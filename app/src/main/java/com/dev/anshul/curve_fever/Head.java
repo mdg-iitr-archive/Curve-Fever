@@ -85,7 +85,7 @@ public class Head {
 
     //returns false if collided
     public boolean line(int x,int y,int x2, int y2) {
-        if(x2<0||y2<0)
+        if(x2<0||y2<0||x2>GameActivity.mScreenSize.x||y2>GameActivity.mScreenSize.y)
             return false;
         int w = x2 - x ;
         int h = y2 - y ;

@@ -112,6 +112,7 @@ public class GameView extends SurfaceView {
         canvas.drawPath (mtrailPath, mHead.pathPaint);
         canvas.drawCircle((float)mHead.headX, (float)mHead.headY, (float)mHead.headRadius, mHead.headPaint);
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -148,15 +149,6 @@ public class GameView extends SurfaceView {
                     break;
             }
         }
-
-//        if(event.getAction()==MotionEvent.ACTION_DOWN)        //Older touch sensing algo
-//            touchHeld=true;
-//        else if(event.getAction()==MotionEvent.ACTION_UP)
-//            touchHeld=false;
-//
-//        while (touchHeld)
-//            mHead.followFinger2((int)event.getX(),(int)event.getY());
-
         return true;
     }
 
@@ -168,31 +160,5 @@ public class GameView extends SurfaceView {
         mContext.startActivity(intent);
     }
 
-//    private void checkCollision(){
-//        Region region1 = new Region();
-//        region1.setPath(mtrailPath,new Region(0, 0, this.mScreenWidth,  this.mScreenHeight));
-//
-//        Path circle = new Path();
-//        circle.addCircle((float)mHead.headX, (float)mHead.headY, 1, Path.Direction.CW);
-//        Region region2 = new Region();
-//        region2.setPath(circle, new Region(0, 0, this.mScreenWidth, this.mScreenHeight));
-//
-//        if (region1.contains((int)mHead.headX,(int)mHead.headY)){
-////        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {    //logic error in regions
-//            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
-//            tryGameOver();
-//        }
-//    }
-
-//    public void checkCollision2(){
-//        RectF rectF = new RectF();
-//        mtrailPath.computeBounds(rectF, true);
-//        r = new Region();
-//        r.setPath(mtrailPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
-//        if(r.contains((int)mHead.headX,(int)mHead.headY)){
-//            Log.d("update", "intesect "+mHead.headX+","+mHead.headY);
-//            tryGameOver();
-//        }
-//    }
 
 }
