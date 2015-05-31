@@ -63,8 +63,10 @@ public class GameView extends SurfaceView {
                 mThread.setRunning(true);
                 mThread.start();
             }
+
             @Override
             public void surfaceChanged(SurfaceHolder mHolder, int format, int width, int height) {}
+
             @Override
             public void surfaceDestroyed(SurfaceHolder mHolder)
             {
@@ -156,8 +158,8 @@ public class GameView extends SurfaceView {
 //        Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, MainActivity.class);
-        ((Activity)mContext).finish();
         mContext.startActivity(intent);
+        ((Activity)mContext).finish();
     }
 
 

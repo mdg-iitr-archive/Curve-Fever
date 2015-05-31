@@ -23,8 +23,8 @@ public class Head {
     protected int headRadius = 5;
 
     //protected int curveRadius = 50;
-    protected double angle  = 90;
-    private int angularChange = 2;
+    protected double angle  = 0;
+    private int angularChange = 3;
 
     public boolean[][] points;
     private int tempx,tempy;
@@ -36,6 +36,8 @@ public class Head {
 
         this.headX = headX;
         this.headY = headY;
+
+        angle = Math.toDegrees(Math.atan((GameActivity.mScreenSize.y/2-headY)/(GameActivity.mScreenSize.x/2-headX)));
 
         points[headY][headX] = true;
 

@@ -27,6 +27,5 @@ public class MainActivity extends Activity {
     public void onPause(){
         super.onPause();
         finish();
-
     }
 }
