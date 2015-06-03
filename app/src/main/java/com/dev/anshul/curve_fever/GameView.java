@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,11 +31,14 @@ public class GameView extends SurfaceView {
     private boolean is_game_started;
     private boolean is_game_paused;
     private Head mHead;
+    private HeadAI mHeadAI;
     private Region r;
-    Path mtrailPath=new Path();
+    private Path mtrailPath=new Path();
+    private Path mtrailPathAI=new Path();
     private Context mContext;
-    private boolean[][] points;
     private static boolean touchHeldLeft = false,touchHeldRight = false;
+
+    public static int delayAI = 5,countAI = 0;
 
 //    public static boolean touchHeld = false;
 
@@ -47,7 +49,6 @@ public class GameView extends SurfaceView {
         this.mScreenWidth = GameActivity.mScreenSize.x;
         this.mScreenHeight= GameActivity.mScreenSize.y;
 
-        points = new boolean[this.mScreenHeight][this.mScreenWidth];
 
         Log.i("screen", this.mScreenWidth+" x "+this.mScreenHeight);
 
@@ -87,32 +88,56 @@ public class GameView extends SurfaceView {
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
         mHead  = new Head(initX,initY);
-        mtrailPath.moveTo(initX,initY);
+        mtrailPath.moveTo(initX, initY);
 
+        initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
+        initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
+        mHeadAI = new HeadAI(initX,initY);
+        mtrailPathAI.moveTo(initX,initY);
     }
 
     public void update()
     {
-        //checkCollision();
-
         if(touchHeldRight){
-            mHead.followFinger2(false);
+            mHead.followFinger(false);
         }
         else if(touchHeldLeft){
-            mHead.followFinger2(true);
+            mHead.followFinger(true);
         }
 
+        mHeadAI.takeDecision();
+
+//        if(countAI==delayAI){
+//            mHeadAI.takeDecision();
+//            countAI=0;
+//        }else{
+//            countAI++;
+//        }
+
+        //User moves forward
         if(!mHead.moveForward()){
-            tryGameOver();
+            tryGameOver("Computer");
         }
+
+        //AI moves forward
+        if(!mHeadAI.moveForward()){
+            tryGameOver("User");
+        }
+
     }
 
     public void draw(Canvas canvas)
     {
         canvas.drawColor(Color.WHITE);
+
+        mtrailPathAI.lineTo((float) mHeadAI.headX, (float) mHeadAI.headY);
+        canvas.drawPath (mtrailPathAI, mHeadAI.pathPaint);
+        canvas.drawCircle((float)mHeadAI.headX, (float)mHeadAI.headY, (float)mHeadAI.headRadius, mHeadAI.headPaint);
+
         mtrailPath.lineTo((float) mHead.headX, (float) mHead.headY);
         canvas.drawPath (mtrailPath, mHead.pathPaint);
         canvas.drawCircle((float)mHead.headX, (float)mHead.headY, (float)mHead.headRadius, mHead.headPaint);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -134,7 +159,7 @@ public class GameView extends SurfaceView {
                     }
 
                         //Do Something here.
-//                    mHead.followFinger2((int)event.getX(),(int)event.getY());
+//                    mHead.followFinger((int)event.getX(),(int)event.getY());
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -144,7 +169,7 @@ public class GameView extends SurfaceView {
 
                 case MotionEvent.ACTION_MOVE:
                     //Do Something here.
-                    mHead.followFinger2((int)event.getX(),(int)event.getY());
+                    mHead.followFinger((int) event.getX(), (int) event.getY());
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     mThread.setRunning(false);
@@ -154,10 +179,10 @@ public class GameView extends SurfaceView {
         return true;
     }
 
-    public void tryGameOver(){
-//        Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
+    public void tryGameOver(String winner){
         mThread.setRunning(false);
-        Intent intent = new Intent(mContext, MainActivity.class);
+        Intent intent = new Intent(mContext, GameOverActivity.class);
+        intent.putExtra("winner", winner);
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
     }

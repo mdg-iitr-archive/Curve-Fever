@@ -50,6 +50,7 @@ public class GameActivity extends Activity {
 
     public void onPause(){
         super.onPause();
+        onDestroy();
     }
 
     public void onResume(){

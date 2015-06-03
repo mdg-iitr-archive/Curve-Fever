@@ -5,6 +5,7 @@ package com.dev.anshul.curve_fever;
  */
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.renderscript.Long4;
 import android.util.Log;
 
 import java.util.Random;
@@ -22,12 +23,11 @@ public class Head {
 
     protected int headRadius = 5;
 
-    //protected int curveRadius = 50;
     protected double angle  = 0;
-    private int angularChange = 3;
+    protected int angularChange = 3;
 
-    public boolean[][] points;
-    private int tempx,tempy;
+    public static boolean[][] points;
+    protected int tempx,tempy;
 
     public Head(int headX,int headY)
     {
@@ -37,7 +37,7 @@ public class Head {
         this.headX = headX;
         this.headY = headY;
 
-        angle = Math.toDegrees(Math.atan((GameActivity.mScreenSize.y/2-headY)/(GameActivity.mScreenSize.x/2-headX)));
+        angle = Math.toDegrees(Math.atan2((GameActivity.mScreenSize.y / 2 - headY), (GameActivity.mScreenSize.x / 2 - headX)));
 
         points[headY][headX] = true;
 
@@ -47,20 +47,14 @@ public class Head {
         pathPaint.setColor(Color.GREEN);
     }
 
-//    public void followFinger(int fingerX, int fingerY)
-//    {
-//        headX -= ((double)headX - (double)fingerX) * (double)headVelocity / 100.0;
-//        headY -= ((double)headY - (double)fingerY) * (double)headVelocity / 100.0;
-//    }
-
-    public void followFinger2(double fingerX,double fingerY){
+    public void followFinger(double fingerX, double fingerY){
         if (fingerX >= GameActivity.mScreenSize.x / 2) {
             angle += angularChange;
         } else {
             angle -= angularChange;
         }
     }
-    public void followFinger2(boolean left){
+    public void followFinger(boolean left){
         if(left){
             angle -=angularChange;
         }
@@ -74,8 +68,8 @@ public class Head {
         tempx=(int)headX;
         tempy=(int)headY;
 
-        headX+=headVelocity*Math.cos(angle * Math.PI / 180);
-        headY+=headVelocity*Math.sin(angle * Math.PI / 180);
+        headX+=this.headVelocity*Math.cos(angle * Math.PI / 180);
+        headY+=this.headVelocity*Math.sin(angle * Math.PI / 180);
         if(headX<GameActivity.mScreenSize.x&&headY<GameActivity.mScreenSize.y) {
             return line(tempx, tempy, (int) headX, (int) headY);
         }
@@ -86,6 +80,7 @@ public class Head {
     }
 
     //returns false if collided
+    //Bresenham line drawing algorithm
     public boolean line(int x,int y,int x2, int y2) {
         if(x2<0||y2<0||x2>GameActivity.mScreenSize.x||y2>GameActivity.mScreenSize.y)
             return false;
@@ -106,10 +101,24 @@ public class Head {
         int numerator = longest >> 1 ;
         for (int i=0;i<=longest;i++) {
 
-            if(!points[y][x])
+            //plotting logic
+            if(!points[y][x]){
                 points[y][x] = true;
-            else if(points[y][x]&&(x!=tempx&&y!=tempy))
+
+            }
+            else if((points[y][x]||points[y+1][x]||points[y][x+1]||points[y-1][x]||points[y][x-1])&&(x!=tempx&&y!=tempy))
                 return false;
+
+//            if(checkPoint(x,y)){
+//                points[y][x] = true;
+//            }
+//            else{
+//                Log.d("loss",x+","+y);
+//                return false;
+//            }
+
+            //plotting logic ends
+
 
             numerator += shortest ;
             if (!(numerator<longest)) {
@@ -123,4 +132,30 @@ public class Head {
         }
         return true;
     }
+
+    public boolean checkPoint(int x,int y){
+        angle%=360;
+        if(angle>45&&angle<=135){
+            if(points[y][x]||points[y+1][x+1]||points[y+1][x]||points[y+1][x-1]){
+                return false;
+            }
+        }
+        else if(angle>135&&angle<=225){
+            if(points[y][x]||points[y+1][x-1]||points[y][x-1]||points[y-1][x-1]) {
+                return false;
+            }
+        }
+        else if(angle>225&&angle<=315){
+            if(points[y][x]||points[y-1][x-1]||points[y-1][x]||points[y-1][x+1]) {
+                return false;
+            }
+        }
+        else{
+            if(points[y][x]||points[y+1][x+1]||points[y][x+1]||points[y-1][x+1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

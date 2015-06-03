@@ -7,7 +7,7 @@ package com.dev.anshul.curve_fever;
 import android.graphics.Canvas;
 
 public class GameThread extends Thread {
-    static final long FPS = 30;
+    static long FPS = 30;
     private boolean running=false;
 
     public Canvas mGameCanvas;
@@ -23,6 +23,9 @@ public class GameThread extends Thread {
         this.running = running;
     }
 
+    public void setFPS(int fps) {
+        FPS = fps;
+    }
 
 
     @Override
@@ -43,6 +46,7 @@ public class GameThread extends Thread {
                 synchronized (mGameView.getHolder())
                 {
                     mGameView.update();
+                    if(mGameCanvas != null)
                         mGameView.draw(mGameCanvas);
                 }
             }
