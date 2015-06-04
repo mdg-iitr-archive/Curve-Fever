@@ -84,6 +84,7 @@ public class GameView extends SurfaceView {
             }
         });
 
+
         Random random = new Random();
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
@@ -94,6 +95,17 @@ public class GameView extends SurfaceView {
         initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
         mHeadAI = new HeadAI(initX,initY);
         mtrailPathAI.moveTo(initX,initY);
+
+
+        //Creating a line at the boundaries
+        for(int i=0;i<=GameActivity.mScreenSize.x;i++){
+            Head.points[0][i] = true;
+            Head.points[GameActivity.mScreenSize.y][i] = true;
+        }
+        for(int i=0;i<=GameActivity.mScreenSize.y;i++){
+            Head.points[i][0] = true;
+            Head.points[i][GameActivity.mScreenSize.x] = true;
+        }
     }
 
     public void update()
