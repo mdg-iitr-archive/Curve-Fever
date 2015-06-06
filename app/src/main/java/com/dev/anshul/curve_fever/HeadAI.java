@@ -77,6 +77,7 @@ public class HeadAI extends Head {
             y += dy2 ;
         }
         //end
+
         if(x<0||y<0||x>GameActivity.mScreenSize.x||y>GameActivity.mScreenSize.y)
             return intMax;
 

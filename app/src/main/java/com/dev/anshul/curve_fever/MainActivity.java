@@ -29,6 +29,12 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        hideSystemUI();
+    }
+
     private void hideSystemUI() {
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content

@@ -86,6 +86,7 @@ public class GameView extends SurfaceView {
             }
         });
 
+        touchHeldLeft=touchHeldRight=false;
         Random random = new Random();
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
@@ -112,6 +113,8 @@ public class GameView extends SurfaceView {
             Head.points[i][1] = true;
             Head.points[i][GameActivity.mScreenSize.x-1] = true;
         }
+
+
     }
 
     public void update()
@@ -122,13 +125,6 @@ public class GameView extends SurfaceView {
         else if(touchHeldLeft){
             mHead.followFinger(true);
         }
-
-//        if(countAI==delayAI){
-//            mHeadAI.takeDecision();
-//            countAI=0;
-//        }else{
-//            countAI++;
-//        }
 
         //User moves forward
         if(!mHead.moveForward(2)){
