@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -36,15 +38,18 @@ public class GameView extends SurfaceView {
     private Path mtrailPath=new Path();
     private Path mtrailPathAI=new Path();
     private Context mContext;
+    private Window mWindow;
     private static boolean touchHeldLeft = false,touchHeldRight = false;
 
     public static int delayAI = 5,countAI = 0;
 
 //    public static boolean touchHeld = false;
 
-    public GameView(Context context){
+    public GameView(Context context,Window window){
         super(context);
         this.mContext = getContext();
+        this.mWindow = window;
+        UiChangeListener();
 
         this.mScreenWidth = GameActivity.mScreenSize.x;
         this.mScreenHeight= GameActivity.mScreenSize.y;
@@ -84,7 +89,6 @@ public class GameView extends SurfaceView {
             }
         });
 
-
         Random random = new Random();
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
@@ -96,15 +100,20 @@ public class GameView extends SurfaceView {
         mHeadAI = new HeadAI(initX,initY);
         mtrailPathAI.moveTo(initX,initY);
 
-
         //Creating a line at the boundaries
         for(int i=0;i<=GameActivity.mScreenSize.x;i++){
             Head.points[0][i] = true;
             Head.points[GameActivity.mScreenSize.y][i] = true;
+
+            Head.points[1][i] = true;
+            Head.points[GameActivity.mScreenSize.y-1][i] = true;
         }
         for(int i=0;i<=GameActivity.mScreenSize.y;i++){
             Head.points[i][0] = true;
             Head.points[i][GameActivity.mScreenSize.x] = true;
+
+            Head.points[i][1] = true;
+            Head.points[i][GameActivity.mScreenSize.x-1] = true;
         }
     }
 
@@ -117,8 +126,6 @@ public class GameView extends SurfaceView {
             mHead.followFinger(true);
         }
 
-        mHeadAI.takeDecision();
-
 //        if(countAI==delayAI){
 //            mHeadAI.takeDecision();
 //            countAI=0;
@@ -127,15 +134,19 @@ public class GameView extends SurfaceView {
 //        }
 
         //User moves forward
-        if(!mHead.moveForward()){
+        if(!mHead.moveForward(2)){
             tryGameOver("Computer");
         }
 
         //AI moves forward
-        if(!mHeadAI.moveForward()){
+        if(!mHeadAI.moveForward(2)){
             tryGameOver("User");
         }
-
+        if(countAI>=delayAI) {
+            mHeadAI.takeDecision();
+            countAI=0;
+        }
+        countAI++;
     }
 
     public void draw(Canvas canvas)
@@ -197,6 +208,25 @@ public class GameView extends SurfaceView {
         intent.putExtra("winner", winner);
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
+    }
+
+    public void UiChangeListener()
+    {
+        final View decorView = mWindow.getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    decorView.setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                }
+            }
+        });
     }
 
 

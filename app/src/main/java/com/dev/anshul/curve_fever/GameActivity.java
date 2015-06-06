@@ -43,18 +43,30 @@ public class GameActivity extends Activity {
         // Xperia T2 has 720 x 1208 px in non-immersive mode
         //           and 720 x 1280 px in immersive mode
         // Nexus 5 emulator  has 1080 x 1920 px
+        hideSystemUI();
+        setContentView(new GameView(this,getWindow()));
 
-        setContentView(new GameView(this));
-        onDestroy();
     }
 
     public void onPause(){
         super.onPause();
-        onDestroy();
     }
 
     public void onResume(){
         super.onResume();
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
 }
