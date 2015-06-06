@@ -38,18 +38,15 @@ public class GameView extends SurfaceView {
     private Path mtrailPath=new Path();
     private Path mtrailPathAI=new Path();
     private Context mContext;
-    private Window mWindow;
     private static boolean touchHeldLeft = false,touchHeldRight = false;
 
     public static int delayAI = 5,countAI = 0;
 
 //    public static boolean touchHeld = false;
 
-    public GameView(Context context,Window window){
+    public GameView(Context context){
         super(context);
         this.mContext = getContext();
-        this.mWindow = window;
-        UiChangeListener();
 
         this.mScreenWidth = GameActivity.mScreenSize.x;
         this.mScreenHeight= GameActivity.mScreenSize.y;
@@ -209,25 +206,5 @@ public class GameView extends SurfaceView {
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
     }
-
-    public void UiChangeListener()
-    {
-        final View decorView = mWindow.getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    decorView.setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
-            }
-        });
-    }
-
 
 }
