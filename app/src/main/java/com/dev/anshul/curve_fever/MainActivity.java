@@ -20,8 +20,17 @@ public class MainActivity extends Activity {
 
     public void onClickPlay(View view)
     {
-        Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
+        switch (view.getId()) {
+            case R.id.playButton:
+                Intent intentCPU = new Intent(this, GameActivity.class);
+                startActivity(intentCPU);
+                break;
+            case R.id.BTActivityButton:
+                Intent intentBT = new Intent(this, BTGameActivity.class);
+                startActivity(intentBT);
+
+                break;
+        }
     }
 
     @Override

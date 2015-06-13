@@ -19,22 +19,21 @@ public class HeadAI extends Head {
     }
 
     public void takeDecision(){
-        d1 = rayDistance((int)headX,(int)headY,(int)angle - angularChange);
-        d2 = rayDistance((int)headX,(int)headY,(int)angle);
-        d3 = rayDistance((int)headX,(int)headY,(int)angle + angularChange);
-        if(d1>d2){
-            if(d1>d3){
-                angle-=angularChange;
+        double tempAngle=0,tempDist=0,maxDist = -100,secAngle=0,minDist = intMax,minAngle=0;
+
+        for(int i=-angularChange*5;i<=angularChange*5;i+=angularChange){
+            tempDist = rayDistance((int)headX,(int)headY, (int) (angle+i));
+            if(tempDist>maxDist){
+                secAngle = tempAngle;
+                tempAngle = i;
+                maxDist = tempDist;
             }
-            else {
-                angle+=angularChange;
-            }
+//            else if(tempDist < minDist){
+//                minAngle = tempAngle;
+//                minDist = tempDist;
+//            }
         }
-        else {
-            if(d2<d3){
-                angle+=angularChange;
-            }
-        }
+        angle+=secAngle>0?tempAngle+2:tempAngle-2;
     }
 
     @Override

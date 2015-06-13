@@ -9,9 +9,22 @@
         android:id="@+id/playButton"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Play"
+        android:text="Play with cpu"
         android:clickable="true"
-        android:onClick="onClickPlay" />
+        android:onClick="onClickPlay"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="151dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickPlay"
+        android:text="Connect via Bluetooth"
+        android:id="@+id/BTActivityButton"
+        android:layout_below="@+id/playButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="104dp" />
 
 </RelativeLayout>
