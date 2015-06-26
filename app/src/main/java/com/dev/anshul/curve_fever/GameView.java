@@ -127,19 +127,21 @@ public class GameView extends SurfaceView {
         }
 
         //User moves forward
-        if(!mHead.moveForward(2)){
+        if(!mHead.moveForward(1)){
             tryGameOver("Computer");
         }
 
         //AI moves forward
-        if(!mHeadAI.moveForward(2)){
+        if(!mHeadAI.moveForward(1)){
             tryGameOver("User");
         }
-        if(countAI>=delayAI) {
-            mHeadAI.takeDecision();
-            countAI=0;
-        }
-        countAI++;
+//        if(countAI>=delayAI) {
+//            mHeadAI.takeDecision();
+//            countAI=0;
+//        }
+//        countAI++;
+
+        mHeadAI.takeDecision3();
     }
 
     public void draw(Canvas canvas)
@@ -199,6 +201,8 @@ public class GameView extends SurfaceView {
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, GameOverActivity.class);
         intent.putExtra("winner", winner);
+        mThread.setRunning(false);
+//        mThread = null;
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
     }

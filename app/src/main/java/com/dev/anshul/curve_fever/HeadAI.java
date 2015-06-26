@@ -8,31 +8,113 @@ import android.graphics.Color;
 public class HeadAI extends Head {
 
     //variable declaration for function call optimization
-    private double d1,d2,d3,distance;
+    private double d1,d2,d3,distance,maxdist=0;
     private int x2,y2,w,h,dx1,dy1,dx2,dy2,longest,shortest,numerator,intMax = Integer.MAX_VALUE;
+
+    //for takeDecision2()
+    private double devCount;
+    private double viewAngle;
+    private boolean increaseDeviation = true;
+
+    //for takeDecision3()
+    private double angleScan[] = new double[360];
+    private double currentRayDistance = 0,maxScanDist = 0;
+    private int scanAngle = 0,maxScanAngle = 0;
+    private int steps = 10;
 
     public HeadAI(int headX, int headY) {
         super(headX, headY);
         headPaint.setColor(Color.MAGENTA);
         pathPaint.setColor(Color.RED);
+        viewAngle = this.angle;
+        devCount = 0;
 //        this.headVelocity = 25;
     }
-
     public void takeDecision(){
+
         d1 = rayDistance((int)headX,(int)headY,(int)angle - angularChange);
         d2 = rayDistance((int)headX,(int)headY,(int)angle);
         d3 = rayDistance((int)headX,(int)headY,(int)angle + angularChange);
+
         if(d1>d2){
             if(d1>d3){
-                angle-=angularChange;
+                angle-= angularChange;
             }
             else {
-                angle+=angularChange;
+                angle+= angularChange;
             }
         }
         else {
             if(d2<d3){
-                angle+=angularChange;
+                angle+= angularChange;
+            }
+        }
+
+    }
+
+    public void takeDecision3(){
+        currentRayDistance = rayDistance((int)headX,(int)headY,(int)angle);
+        maxScanDist = currentRayDistance;
+        maxScanAngle = (int)angle;
+        if(scanAngle>=360||scanAngle+steps>=369){
+            scanAngle = 0;
+        }
+
+        for(int i=0;i<steps;i++){
+            angleScan[scanAngle+i] = rayDistance((int)headX,(int)headY,scanAngle+i);
+            if(angleScan[scanAngle+i] > maxScanDist){
+                maxScanDist = angleScan[scanAngle+i];
+                maxScanAngle = scanAngle + i;
+            }
+        }
+        scanAngle += steps;
+
+        if(Math.abs(angle-maxScanAngle)<=100){
+//            if(currentRayDistance < angleScan[maxScanAngle-1] && currentRayDistance < angleScan[maxScanAngle+1])
+                angle = maxScanAngle;
+        }
+
+
+
+
+    }
+
+    public void takeDecision2(){
+        if(increaseDeviation){
+            devCount+=1;
+            if(devCount == 90){
+                increaseDeviation = false;
+                maxdist = 0;
+            }
+        }
+        else{
+            devCount-=1;
+            if(devCount ==-90){
+                increaseDeviation = true;
+                maxdist = 0;
+            }
+        }
+
+        viewAngle = angle + devCount;
+
+        d1 = rayDistance((int)headX,(int)headY,(int)viewAngle - angularChange);
+        d2 = rayDistance((int)headX,(int)headY,(int)viewAngle);
+        d3 = rayDistance((int)headX,(int)headY,(int)viewAngle - angularChange);
+
+        if(d1>d2){
+            if(d1>d3){
+                if(d3 > maxdist)
+                    angle=viewAngle - angularChange;
+            }
+            else {
+                if(d1 > maxdist)
+                    angle=viewAngle + angularChange;
+            }
+        }
+        else {
+            if(d2<d3){
+                if(d3 > maxdist)
+                    angle=viewAngle + angularChange;
             }
         }
     }
@@ -41,6 +123,7 @@ public class HeadAI extends Head {
     public boolean moveForward(int width) {
         return super.moveForward(width);
     }
+
 
     public double rayDistance(int x,int y,int angle){
         tempx = x;
