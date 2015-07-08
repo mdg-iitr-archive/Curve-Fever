@@ -10,8 +10,8 @@ import android.util.Log;
 
 public class Head {
 
-    protected double headX;
-    protected double headY;
+    public double headX;
+    public double headY;
     protected int headVelocity = 5;
 
     protected Paint headPaint = new Paint();
@@ -30,17 +30,29 @@ public class Head {
     private int sx,sy,i,j;
     private double absAngle;
 
-    public Head(int headX,int headY)
+    public Head(int headX,int headY,boolean BT)
     {
         Log.d("random",headX+","+headY);
-        points = new boolean[GameActivity.mScreenSize.y+1][GameActivity.mScreenSize.x+1];
+        if(BT){
+            points = new boolean[BTGameActivity.mScreenSize.y+1][BTGameActivity.mScreenSize.x+1];
 
-        this.headX = headX;
-        this.headY = headY;
+            this.headX = headX;
+            this.headY = headY;
 
-        angle = Math.toDegrees(Math.atan2((GameActivity.mScreenSize.y / 2 - headY), (GameActivity.mScreenSize.x / 2 - headX)));
+            angle = Math.toDegrees(Math.atan2((BTGameActivity.mScreenSize.y / 2 - headY), (BTGameActivity.mScreenSize.x / 2 - headX)));
 
-        points[headY][headX] = true;
+            points[headY][headX] = true;
+        }
+        else{
+            points = new boolean[GameActivity.mScreenSize.y+1][GameActivity.mScreenSize.x+1];
+
+            this.headX = headX;
+            this.headY = headY;
+
+            angle = Math.toDegrees(Math.atan2((GameActivity.mScreenSize.y / 2 - headY), (GameActivity.mScreenSize.x / 2 - headX)));
+
+            points[headY][headX] = true;
+        }
 
         headPaint.setColor(Color.parseColor("#013ADF"));
         pathPaint.setStrokeWidth(3);
@@ -93,6 +105,38 @@ public class Head {
             return false;
 
         return true;
+    }
+
+    //Function for opponent movement in BT game
+    public boolean moveTo(int x,int y,int width){
+        tempx=(int)headX;
+        tempy=(int)headY;
+
+        width/=2;
+        absAngle=Math.abs(angle);
+
+        headX+=this.headVelocity*Math.cos(angle * Math.PI / 180);
+        headY+=this.headVelocity*Math.sin(angle * Math.PI / 180);
+
+        if(line(tempx, tempy, (int) headX, (int) headY)){
+            if(absAngle>45.0&&absAngle<=135.0){
+                for(i=-width;i<=width;i++){
+                    if(i==0) continue;
+                    line(tempx+i,tempy,(int)headX+i,(int)headY);
+                }
+            }
+            else{
+                for(i=-width;i<=width;i++){
+                    if(i==0) continue;
+                    line(tempx,tempy+i,(int)headX,(int)headY+i);
+                }
+            }
+        }
+        else
+            return false;
+
+        return true;
+
     }
 
     //returns false if collided
@@ -205,4 +249,7 @@ public class Head {
         return true;
     }
 
+    public void setVelocity(int velocity){
+        headVelocity = velocity;
+    }
 }

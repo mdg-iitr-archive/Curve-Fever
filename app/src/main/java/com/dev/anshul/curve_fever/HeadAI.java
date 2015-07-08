@@ -12,7 +12,7 @@ public class HeadAI extends Head {
     private int x2,y2,w,h,dx1,dy1,dx2,dy2,longest,shortest,numerator,intMax = Integer.MAX_VALUE;
 
     public HeadAI(int headX, int headY) {
-        super(headX, headY);
+        super(headX, headY,false);
         headPaint.setColor(Color.MAGENTA);
         pathPaint.setColor(Color.RED);
 //        this.headVelocity = 25;
