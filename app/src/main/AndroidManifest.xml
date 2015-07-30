@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dev.anshul.curve_fever" >
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +25,14 @@
         <activity
             android:name=".GameOverActivity"
             android:label="@string/title_activity_game_over" >
+        </activity>
+        <activity
+            android:name=".BTGameActivity"
+            android:label="@string/title_activity_btgame" >
+        </activity>
+        <activity
+            android:name=".DeviceListActivity"
+            android:label="@string/title_activity_device_list" >
         </activity>
     </application>
 

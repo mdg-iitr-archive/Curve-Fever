@@ -23,7 +23,7 @@ public class HeadAI extends Head {
     private int steps = 10;
 
     public HeadAI(int headX, int headY) {
-        super(headX, headY);
+        super(headX, headY,false);
         headPaint.setColor(Color.MAGENTA);
         pathPaint.setColor(Color.RED);
         viewAngle = this.angle;
@@ -116,6 +116,10 @@ public class HeadAI extends Head {
                 if(d3 > maxdist)
                     angle=viewAngle + angularChange;
             }
+//            else if(tempDist < minDist){
+//                minAngle = tempAngle;
+//                minDist = tempDist;
+//            }
         }
     }
 

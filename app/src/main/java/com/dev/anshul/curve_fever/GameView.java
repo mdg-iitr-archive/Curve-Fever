@@ -90,7 +90,7 @@ public class GameView extends SurfaceView {
         Random random = new Random();
         int initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
         int initY = random.nextInt(GameActivity.mScreenSize.y-200)+100;
-        mHead  = new Head(initX,initY);
+        mHead  = new Head(initX,initY,false);
         mtrailPath.moveTo(initX, initY);
 
         initX = random.nextInt(GameActivity.mScreenSize.x-200)+100;
