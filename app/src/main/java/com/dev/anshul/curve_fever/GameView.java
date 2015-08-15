@@ -127,12 +127,12 @@ public class GameView extends SurfaceView {
         }
 
         //User moves forward
-        if(!mHead.moveForward(1)){
+        if(!mHead.moveForward(3)){
             tryGameOver("Computer");
         }
 
         //AI moves forward
-        if(!mHeadAI.moveForward(1)){
+        if(!mHeadAI.moveForward(3)){
             tryGameOver("User");
         }
 //        if(countAI>=delayAI) {

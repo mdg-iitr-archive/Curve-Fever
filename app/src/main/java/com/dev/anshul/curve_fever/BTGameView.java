@@ -133,7 +133,7 @@ public class BTGameView extends SurfaceView {
             }
         }
         else {
-            if (!mHeadOpponent.moveTo(x, y, 2)) {
+            if (!mHeadOpponent.moveTo(x, y, 3)) {
                 tryGameOver("You");
                 Log.d("BT", "Opp. moved to "+x+","+y);
             }
